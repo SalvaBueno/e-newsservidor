@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 from configuracion import views as configuracion_views
 from django.contrib.auth.decorators import login_required
 from usuarios import views as usuarios_views
-from textos import views as textos_views
+from web import views as web_views
 
 from django.contrib import admin
 
@@ -13,8 +13,8 @@ admin.autodiscover()
 
 urlpatterns = [
 
-    url(r'^$', textos_views.Index.as_view(), name='inicio'),
-    url(r'^(?P<error>\d+)$', textos_views.Index.as_view(), name='inicio'),
+    url(r'^$', web_views.Index.as_view(), name='inicio'),
+    # url(r'^(?P<error>\d+)$', textos_views.Index.as_view(), name='inicio'),
     # url(r'^main/$', usuarios_views.Calendario.as_view(), name='inicio'),
     url(r'^login/$', configuracion_views.ajax_login, name='login'),
     url(r'^logout/$', configuracion_views.ajax_logout, name='logout'),
@@ -26,9 +26,9 @@ urlpatterns = [
 
 
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('web.urls')),
     url(r'^usuarios/', include('usuarios.urls')),
-    url(r'^busqueda/$', textos_views.Busqueda.as_view(), name='busqueda'),
-    url(r'^texto/$', textos_views.Textos.as_view(), name='texto'),
+    # url(r'^busqueda/$', textos_views.Busqueda.as_view(), name='busqueda'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 ]
 

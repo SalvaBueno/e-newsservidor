@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+from utilidades.contrasena import contrasena_generator
+
 __author__ = 'brian'
 
 import django.contrib.auth as auth
@@ -8,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 import json
 import datetime
-from utilidades import Token
+from utilidades import Token, enviarmail
 from usuarios.models import Tokenregister
 from django.contrib.auth.models import User
 
@@ -39,14 +41,58 @@ def comprobar_usuario(datos):
             return False
 
 
-# definicion para loguear un usuario desde la aplicación java
+# definicion para registrar un usuario
+@csrf_exempt
+def registrar_usuario(request):
+    print "registrando usuario"
+    try:
+        datos = json.loads(request.POST['data'])
+        nombre = datos.get('usuario')
+        email = datos.get('email')
+        password = datos.get('password')
+
+        if (nombre is None and email is None and password is None) or (nombre == "" and password == "" and email == ""):
+            response_data = {'result': 'error', 'message': 'Falta el nombre usuario, email y password'}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        if nombre is None or nombre == "":
+            response_data = {'result': 'error', 'message': 'Falta el nombre de usuario'}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        if password is None or password == "":
+            response_data = {'result': 'error', 'message': 'Falta el password'}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        if email is None or email == "":
+            response_data = {'result': 'error', 'message': 'Falta el email'}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+        usuarios = User.objects.filter(username=nombre)
+        usuarios_email = User.objects.filter(email=email)
+
+        if usuarios.count() == 0:
+            if usuarios_email.count() == 0:
+                user = User.objects.create(username=nombre, email=email)
+                user.set_password(password)
+                user.save()
+                response_data = {'result': 'ok', 'message': 'Usuario creado correctamente'}
+            else:
+                response_data = {'result': 'error', 'message': 'Este email ya existe'}
+        else:
+            response_data = {'result': 'error', 'message': 'Este nombre de usuario ya existe'}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except:
+        response_data = {'errorcode': 'U0005', 'result': 'error', 'message': 'Error en crear usuario. ' + str(e)}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
 @csrf_exempt
 def login(request):
     print "Login"
     try:
-
         datos = json.loads(request.POST['data'])
-
         us = datos.get('usuario').lower()
         password = datos.get('password')
 
@@ -67,23 +113,20 @@ def login(request):
         if user is not None:
             if user.is_active:
                 user_token = get_object_or_None(Tokenregister, user=user)
-
                 if user_token is None:
                     token1 = str(user.id) + "_" + Token.id_generator()
                     tokenform = Tokenregister(token=token1, user=user)
                     tokenform.save()
                     user_token = get_object_or_None(Tokenregister, user=user)
-                    response_data = {'result': 'ok', 'message': 'Usuario logueado', 'token': user_token.token,
-                                     'usuario': user.username,
-                                     'nombre': user.first_name,
-                                     }
                 else:
-                    # user_token.date = datetime.datetime.now()
-                    # user_token.token = str(user.id) + "_" + Token.id_generator()
-                    # user_token.save()
-                    response_data = {'result': 'error',
-                                     'message': 'Ya hay una sesion iniciada. Cierra primero las otras',
-                                     }
+                    user_token.date = datetime.datetime.now()
+                    user_token.token = str(user.id) + "_" + Token.id_generator()
+                    user_token.save()
+
+                response_data = {'result': 'ok', 'message': 'Usuario logueado', 'token': user_token.token,
+                                 'usuario': user.username,
+                                 'nombre': user.first_name,
+                                 }
 
                 return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
@@ -166,7 +209,7 @@ def get_perfil(request):
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
-        response_data = {'errorcode': 'U0004', 'result': 'error', 'message': 'Error en perfil de usuario: '+str(e)}
+        response_data = {'errorcode': 'U0004', 'result': 'error', 'message': 'Error en perfil de usuario: ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -195,7 +238,39 @@ def cambiar_pass(request):
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
-        response_data = {'errorcode': 'U0005', 'result': 'error', 'message': 'Error en perfil de usuario: '+str(e)}
+        response_data = {'errorcode': 'U0005', 'result': 'error', 'message': 'Error en perfil de usuario: ' + str(e)}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def recuperar_contrasena(request):
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+            username = datos.get('usuario')
+
+        except Exception as e:
+            username = request.POST['usuario']
+
+        # if token != "" and comprobar_usuario2(token, userdjango_id):
+        userdjango = get_object_or_None(User, username=username)
+        if userdjango is not None:
+            nueva_contrasena = contrasena_generator()
+            userdjango.set_password(nueva_contrasena)
+
+            userdjango.save()
+            enviarmail.envmail2("Se ha generado una nueva contraseña: " + nueva_contrasena, "Contraseña nueva",
+                                userdjango.email)
+
+            response_data = {'result': 'ok', 'message': 'se ha enviado un email con la nueva contraseña'}
+
+        else:
+            response_data = {'result': 'error', 'message': 'usuario no existe'}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0003', 'result': 'error', 'message': str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -217,7 +292,7 @@ def cambiar_datos(request):
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
-        response_data = {'errorcode': 'U0007', 'result': 'error', 'message': 'Error en perfil de usuario: '+str(e)}
+        response_data = {'errorcode': 'U0007', 'result': 'error', 'message': 'Error en perfil de usuario: ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -239,7 +314,8 @@ def get_usuarios(request):
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
-        response_data = {'errorcode': 'U0006', 'result': 'error', 'message': 'Error en busqueda de usuarios : '+str(e)}
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en busqueda de usuarios : ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 # realizar este get_usuarios en Centros y Sesiones. Lo unico que varia es el try con los datos que cada uno pide
