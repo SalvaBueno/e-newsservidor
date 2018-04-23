@@ -1,0 +1,93 @@
+{% extends "principal.html" %}
+
+
+{% block extracss %}
+    <!-- Page-Level Plugin CSS - Tables -->
+    <link href="{{ STATIC_URL }}css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+        <!-- /.row -->
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="{% url 'usuario_create' %} " class="btn btn-success"><i class="fa fa-plus-circle fa-fw"></i> Añadir</a>
+                            </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <div class=" panel-secondary">
+                            <div class="panel-heading">
+                                <i class="fa fa-user fa-fw"></i> Administradores del sistema
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        {% if usuarios %}
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover table-striped" id="alumno-list">
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+
+                                                    <th>Nombre Usuario</th>
+                                                    <th>Email</th>
+                                                    <th>Opciones</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for a in usuarios %}
+                                                    <tr>
+                                                        <td class="">{{ forloop.counter }}</td>
+
+                                                        <td class="">{{ a.username }}</td>
+                                                        <td class="">{{ a.email }}</td>
+                                                        <td><a href="{% url 'usuario_edit' a.pk %}">
+                                                                <button class="btn btn-warning"><i class="fa fa-edit fa-fw"></i></i>
+                                                                </button></a>
+                                                            <a href="{% url 'usuario_delete' a.pk %}">
+                                                                <button class="btn btn-danger"><i class="fa fa-eraser fa-fw"></i></i>
+                                                                </button></a>
+                                                            </a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.table-responsive -->
+                                        {% else %}
+                                            <p>No hay Usuarios. Registrelos <a href="">aquí</a>.</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- /.col-lg-8 (nested) -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                    </section>
+
+                </div>
+        </div>
+{% endblock %}
+
+        {% block extrajs %}
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+    $(document).ready(function() {
+        $('#alumno-list').dataTable({
+            "oLanguage": {
+			    "sUrl": "{{ STATIC_URL }}datatables/i18n/es_ES.txt"
+		    }
+
+        });
+    });
+    </script>
+{% endblock %}

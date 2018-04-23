@@ -1,0 +1,38 @@
+{% extends "cabecera.html" %}
+{% load bootstrap %}
+
+{% block content %}
+
+        <!-- /.row -->
+        <div class="row">
+                <div class="col-lg-6 col-sm-offset-3">
+                    <div class="panel panel-secondary">
+                        <div class="panel-heading">
+                            <i class="fa fa-briefcase fa-fw"></i> Cambiar Contraseña {{ usuario.username}}
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                   <form class="form-signin" action="{% url 'confirmar_cambiar_pass' token %}" method="post">{% csrf_token %}
+
+                                        <p>Va cambiar su contraseña, ¿está seguro?</p>
+                                       {{ form | bootstrap}}
+                                      <a href="" class="btn btn-warning" type="submit" ><i class="fa fa-arrow-left fa-fw"></i> Atrás</a>
+                                      <button class="btn btn-danger" type="submit" ><i class="fa fa-trash-o fa-fw"></i> cambiar</button>
+                                    </form>
+                                    {%if mensaje %}
+                                        {{mensaje}}
+                                    {%endif%}
+                                </div>
+
+                                <!-- /.col-lg-8 (nested) -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,301 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dreams Apps Creative - Sistema de Clientes">
+    <meta name="author" content="Brayan Bermúdez Luque">
+    <meta name="keyword" content="Dreams Apps Creative,Admin,CMS, Sistema de Clientes, eDreams">
+    <link rel="shortcut icon" href="{{ STATIC_URL }}niceAdmin/img/favicon.ico">
+
+    <title>Pulseras - Dreams Apps Creative </title>
+
+    <!-- Bootstrap CSS -->
+    <link href="{{ STATIC_URL }}niceAdmin/css/bootstrap.min.css" rel="stylesheet">
+    <!-- bootstrap theme -->
+    <link href="{{ STATIC_URL }}niceAdmin/css/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="{{ STATIC_URL }}niceAdmin/css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}niceAdmin/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- full calendar css-->
+{#    <link href="{{ STATIC_URL }}niceAdmin/assets/fullcalendar/fullcalendar/bootstrap-fullcalendar.css" rel="stylesheet" />#}
+{#	<link href="{{ STATIC_URL }}niceAdmin/assets/fullcalendar/fullcalendar/fullcalendar.css" rel="stylesheet" />#}
+    <!-- easy pie chart-->
+    <link href="{{ STATIC_URL }}niceAdmin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <!-- owl carousel -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}niceAdmin/css/owl.carousel.css" type="text/css">
+	<link href="{{ STATIC_URL }}niceAdmin/css/jquery-jvectormap-1.2.2.css" rel="stylesheet">
+    <!-- Custom styles -->
+	<link rel="stylesheet" href="{{ STATIC_URL }}niceAdmin/css/fullcalendar.css">
+	<link href="{{ STATIC_URL }}niceAdmin/css/widgets.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}niceAdmin/css/style.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}niceAdmin/css/style-responsive.css" rel="stylesheet" />
+	<link href="{{ STATIC_URL }}niceAdmin/css/xcharts.min.css" rel=" stylesheet">
+	<link href="{{ STATIC_URL }}niceAdmin/css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+{#	<link href="{{ STATIC_URL }}niceAdmin/css/auto-complete.css" rel="stylesheet">#}
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
+    <!--[if lt IE 9]>
+      <script src="{{ STATIC_URL }}niceAdmin/js/html5shiv.js"></script>
+      <script src="{{ STATIC_URL }}niceAdmin/js/respond.min.js"></script>
+      <script src="{{ STATIC_URL }}niceAdmin/js/lte-ie7.js"></script>
+    <![endif]-->
+
+
+      <!-- javascripts -->
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}niceAdmin/js/jquery-ui-1.9.2.custom.min.js"></script>
+
+      
+      {% block extracss %}
+    {% endblock %}
+    {% block extrahead %}
+    {% endblock %}
+  </head>
+  <body >
+  <!-- container section start -->
+  <section id="container" class="">
+      <header class="header dark-bg">
+            <div class="toggle-nav" id="btn_nav" title="Mostrar/ocultar menú">
+                <i id="btnSidebar" class="fa fa-navicon" ></i>
+            </div>
+            <!--logo start-->
+            <a href="/" class="logo">e<span class="lite">Dreams </span></a>
+            <!--logo end-->
+            <div class="top-nav notification-row">
+                <!-- notificatoin dropdown start-->
+                <ul class="nav pull-right top-menu">
+                    <!-- task notificatoin start -->
+                    <!-- task notificatoin end -->
+                    <!-- inbox notificatoin start
+                   <li id="mail_notificatoin_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="icon-envelope-l"></i>
+                            <span  class="badge bg-important numero_mensajes">5</span>
+                        </a>
+                        <ul class="dropdown-menu extended inbox listamensajes">
+                            <div class="notify-arrow notify-arrow-blue"></div>
+                            <li>
+                                <p class="blue">Tienes <span class="numero_mensajes">0</span> mensajes nuevos</p>
+                            </li>
+                            <li>
+                                <a href="">Ver todos los mensajes</a>
+                            </li>
+                        </ul>
+                    </li>
+                    inbox notificatoin end -->
+                    <!-- alert notification start-->
+                    <!-- alert notification end-->
+                    <!-- user login dropdown start-->
+                    <!-- user login dropdown end -->
+                </ul>
+                <!-- notificatoin dropdown end-->
+            </div>
+      </header>
+      <!--header end-->
+      <!--sidebar start-->
+      <aside>
+          <div id="sidebar"  class="nav-collapse">
+              <!-- sidebar menu start-->
+              <ul class="sidebar-menu">
+                  <li id="menu-usuario-nav" class="sub-menu" title="Opciones de Perfil de Usuario">
+                      <a class="" href="javascript:;">
+                          <span class="profile-ava">
+                                <i class="icon_profile"></i>
+                            </span>
+                          <span>{{user.username}}</span>
+                          <span class="menu-arrow arrow_carrot-right"></span>
+                      </a>
+                      <ul class="sub">
+                          <div class="log-arrow-up"></div>
+                            <li class="eborder-top" onclick="hideNav();" title="Información del Perfil">
+                                <a href=""><i class="icon_profile"></i> Mi perfil</a>
+                            </li>
+                            <li onclick="hideNav();" title="Buzón de mensajes">
+                                <a href=""><i class="icon_mail_alt"></i> Mis Mensajes</a>
+                            </li>
+                            <li onclick="hideNav();" title="Restablecer la Contraseña de Usuario">
+                                <a href=""><i class="icon_key_alt"></i> Recuperar pass.  </a>
+                            </li>
+
+                            <li onclick="hideNav();" title="Cerrar la sesión">
+                                <a href=""><i class="icon_key_alt"></i> Log Out</a>
+                            </li>
+
+                      </ul>
+                  </li>
+
+
+                  <li class="sub-menu">
+                      <a class="" href="javascript:;">
+                          <i class="fa fa-users"></i>
+                          <span>Usuarios</span>
+                          <span class="menu-arrow arrow_carrot-right"></span>
+                      </a>
+                      <ul class="sub">
+                          <li><a class="" href="{% url 'administradores_list' %}">Administradores</a></li>
+                          <li><a class="" href="{% url 'clientes_list' %}">Clientes</a></li>
+                      </ul>
+                  </li>
+
+
+                      <li title="Información de Clientes habituales">
+                          <a class="" href="">
+                              <i class="fa fa-users"></i>
+                              <span>Clientes</span>
+                          </a>
+                      </li>
+                      <li title="Información de Clientes habituales">
+                          <a class="" href="">
+                              <i class="fa fa-users"></i>
+                              <span>TPV</span>
+                          </a>
+                      </li>
+
+
+                      <li title="Gestión de Productos">
+                          <a class="" href="">
+                              <i class="fa fa-shopping-basket"></i>
+                              <span>Productos</span>
+                          </a>
+                      </li>
+
+                      <li title="Gráficas estadísiticas de la Empresa">
+                          <a class="" href="">
+                              <i class="fa fa-bar-chart"></i>
+                              <span>Estadisticas</span>
+                          </a>
+                      </li>
+                      <li title="Ajustes de personalización de la Empresa">
+                          <a class="" href="">
+                              <i class="fa fa-cog"></i>
+                              <span>Configuración</span>
+                          </a>
+                      </li>
+
+              </ul>
+              <!-- sidebar menu end-->
+          </div>
+      </aside>
+      <!--sidebar end-->
+
+      <!--main content start-->
+      <section id="main-content" >
+          {% block wrapper %}
+
+          <section class="wrapper">
+              {% block content %}
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <h1 class="page-header">Dreams Apps Creative</h1>
+                      </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <div class="row">
+              <section class="col-lg-12 novedades">
+                  <header>Novedades en la Web</header>
+                  <article>
+                      <h4><span>Versión:</span> eDreams v.1.0</h4>
+                      <ul>
+                          <li> <span>Actualización.</span> Se añade registro de último precio por producto para determinado cliente, y así éste aparezca autoseleccionado. </li>
+                          <li> <span>Actualización.</span> Se desactiva el ocultado de la barra lateral de navegación en dispositivos móviles y tablets. </li>
+                          <li> <span>Actualización.</span> Se corrigen diversos errores descubiertos. Se modifica sistema de Control de Stock para que éste descuente los productos comprados de su correspondiente Stock. </li>
+                      </ul>
+                  </article>
+              </section>
+            </div>
+            <!-- /.row -->
+
+            {% endblock %}
+          </section>
+          {% endblock %}
+      </section>
+      <!--main content end-->
+  </section>
+  <!-- container section start -->
+
+    <!-- bootstrap -->
+    <script src="{{ STATIC_URL }}niceAdmin/js/bootstrap.min.js"></script>
+    <!-- nice scroll -->
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery.scrollTo.min.js"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <!-- charts scripts -->
+    <script src="{{ STATIC_URL }}niceAdmin/assets/jquery-knob/js/jquery.knob.js"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery.sparkline.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/js/owl.carousel.js" ></script>
+    <!-- jQuery full calendar -->
+{#    <<script src="{{ STATIC_URL }}niceAdmin/js/fullcalendar.min.js"></script> <!-- Full Google Calendar - Calendar -->#}
+{#	<script src="{{ STATIC_URL }}niceAdmin/assets/fullcalendar/fullcalendar/fullcalendar.js"></script>#}
+    <!--script for this page only-->
+    <script src="{{ STATIC_URL }}niceAdmin/js/calendar-custom.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery.rateit.min.js"></script>
+    <!-- custom select -->
+    <script src="{{ STATIC_URL }}niceAdmin/js/jquery.customSelect.min.js" ></script>
+	<script src="{{ STATIC_URL }}niceAdmin/assets/chart-master/Chart.js"></script>
+
+    <!--custome script for all page-->
+    <script src="{{ STATIC_URL }}niceAdmin/js/scripts.js"></script>
+    <!-- custom script for this page-->
+    <script src="{{ STATIC_URL }}niceAdmin/js/sparkline-chart.js"></script>
+    <script src="{{ STATIC_URL }}niceAdmin/js/easy-pie-chart.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery-jvectormap-1.2.2.min.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/xcharts.min.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery.autosize.min.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery.placeholder.min.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/gdp-data.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/morris.min.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/sparklines.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/charts.js"></script>
+	<script src="{{ STATIC_URL }}niceAdmin/js/jquery.slimscroll.min.js"></script>
+{#	<script src="{{ STATIC_URL }}niceAdmin/js/auto-complete.min.js"></script>#}
+{#	<script src="{{ STATIC_URL }}niceAdmin/js/auto-complete.js"></script>#}
+<!--
+    <script src="{{ STATIC_URL }}niceAdmin/js/dataTablesJS/dataTables.bootstrap.js"></script>-->
+{#    <script src="{{ STATIC_URL }}niceAdmin/js/dataTablesJS/jquery.dataTables.js"></script>#}
+    {% block extrajs %}
+    {% endblock %}
+    <script>
+        $(document).ready(function() {
+
+            /**  Este script permite ocultar la barra de navegación lateral en dispositivos móviles y tablets.
+             * Hay que condicionarla a la configuración de usuario **/
+
+             /*if($.browser.device = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()))) {
+                $('aside').toggleClass('sidebar-closed');
+            }*/
+
+            /****************************************************************************************************************/
+
+            $('#main-content').css({'height': ($(window).height() - 60) + 'px'});
+        });
+        function hideNav( ){  /* Esta función se encarga de ocultar el menú lateral al pulsar sobre cualquier zona de contenido.*/
+            if($.browser.device = (/android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()))) {
+                if ($('aside').hash('sidebar-closed')) {
+                } else{
+                    $('aside').toggleClass('sidebar-closed');
+                }
+            }
+        }
+    </script>
+
+  <script>
+    /* Función para pasar por post la Primary Key / ID de la empresa seleccionada, dentro de la lista de navegación de Empresas. Será llada desde su href */
+    function seleccionar_empresa(pk_empresa){
+        $.post('/empresas/seleccionar_empresas/',
+            {
+                pk : pk_empresa
+            }, function(data, status){
+                location.href = '/usuarios/perfil/' + {{ user.pk }};
+            });
+    }
+  </script>
+  </body>
+</html>

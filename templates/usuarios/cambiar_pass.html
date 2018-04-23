@@ -1,0 +1,43 @@
+{% extends "principal.html" %}
+{% load bootstrap %}
+
+{% block content %}
+        <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Usuarios</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-secondary">
+                        <div class="panel-heading">
+                            <i class="fa fa-briefcase fa-fw"></i> Cambiar Contraseña {{ usuario.username}}
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                   <form class="form-signin" action="{% url 'usuario_cambiar_pass' usuario.pk %}" method="post">{% csrf_token %}
+
+                                        <p>Va cambiar su contraseña, ¿está seguro?</p>
+                                       {{ form | bootstrap}}
+                                      <a href="{% url 'usuario_perfil' usuario.pk %}" class="btn btn-warning" type="submit" ><i class="fa fa-arrow-left fa-fw"></i> Atrás</a>
+                                      <button class="btn btn-danger" type="submit" ><i class="fa fa-trash-o fa-fw"></i> cambiar</button>
+                                    </form>
+                                    {%if mensaje %}
+                                        {{mensaje}}
+                                    {%endif%}
+                                </div>
+
+                                <!-- /.col-lg-8 (nested) -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+        </div>
+{% endblock %}

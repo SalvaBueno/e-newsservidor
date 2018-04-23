@@ -1,0 +1,49 @@
+/* Barra de navegacion */
+.navbar {
+    margin-bottom: 0px;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width: 1224px) {
+    .wrapper {
+        min-height: 70%;
+    }
+}
+
+/* Large screens ----------- */
+@media only screen
+and (min-width: 1824px) {
+    .wrapper {
+        min-height: 80%;
+    }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+  .wrapper {
+        min-height: 65%;
+    }
+}
+
+.dropdown-menu{
+    min-width: 200px;
+    padding: 15px 15px 5px;
+}
+
+/* Login del navbar */
+#login-dp {
+    min-width: 200px;
+    padding: 15px 20px;
+}
+
+/* Estilo del footer */
+footer {
+    background-color: #f8f8f8;
+    border-top: 1px solid #e7e7e7;
+}

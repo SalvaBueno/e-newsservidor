@@ -1,0 +1,26 @@
+echo " <VirtualHost *:80> " > $ARCHIVO_CONF_APACHE
+echo "	ServerName $SERVER_NAME " >> $ARCHIVO_CONF_APACHE
+echo "	ServerAlias $SERVER_ALIAS " >> $ARCHIVO_CONF_APACHE
+echo "	DocumentRoot $DIRECTORIO_PROYECTO " >> $ARCHIVO_CONF_APACHE
+echo "	ErrorLog $ARCHIVO_LOG " >> $ARCHIVO_CONF_APACHE
+echo "	 " >> $ARCHIVO_CONF_APACHE
+echo "	 " >> $ARCHIVO_CONF_APACHE
+echo "	 " >> $ARCHIVO_CONF_APACHE
+echo "	WSGIDaemonProcess $NOMBRE_ENTORNO python-path=$RUTA_ENTORNO python-home=${RUTA_ENTORNO}${NOMBRE_ENTORNO}lib/python2.7/site-packages/ processes=5 threads=5 display-name=%{GROUP} " >> $ARCHIVO_CONF_APACHE
+echo "	WSGIProcessGroup $NOMBRE_ENTORNO " >> $ARCHIVO_CONF_APACHE
+echo "	WSGIScriptAlias / $ARCHIVO_WSGI " >> $ARCHIVO_CONF_APACHE
+echo " " >> $ARCHIVO_CONF_APACHE
+echo "	" >> $ARCHIVO_CONF_APACHE
+echo "	Alias /static ${DIRECTORIO_PROYECTO}static/ " >> $ARCHIVO_CONF_APACHE
+echo " " >> $ARCHIVO_CONF_APACHE
+echo "	 " >> $ARCHIVO_CONF_APACHE
+echo "	<Directory $DIRECTORIO_PROYECTO> " >> $ARCHIVO_CONF_APACHE
+echo "		Options Indexes FollowSymLinks " >> $ARCHIVO_CONF_APACHE
+echo "		AllowOverride None " >> $ARCHIVO_CONF_APACHE
+echo "		Require all granted " >> $ARCHIVO_CONF_APACHE
+echo "	        Allow from all " >> $ARCHIVO_CONF_APACHE
+echo "	</Directory>" >> $ARCHIVO_CONF_APACHE
+echo "" >> $ARCHIVO_CONF_APACHE
+echo "" >> $ARCHIVO_CONF_APACHE
+echo "" >> $ARCHIVO_CONF_APACHE
+echo "</VirtualHost>" >> $ARCHIVO_CONF_APACHE

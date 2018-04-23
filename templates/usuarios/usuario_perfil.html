@@ -1,0 +1,67 @@
+{% extends "principal.html" %}
+{% load bootstrap %}
+
+{% block content %}
+        <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header"> Perfil de {{usuario.username}}</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-secondary">
+                        <div class="panel-heading">
+                            <i class="fa fa-user fa-fw"></i> Datos
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                Nombre: {{usuario.first_name}}<br>
+                                Apellidos:  {{usuario.last_name}} <br>
+                                Email:  {{usuario.email}}
+
+                                </div>
+
+                                <!-- /.col-lg-8 (nested) -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+            <div class="col-lg-2">
+                    <div class="panel panel-secondary">
+                        <div class="panel-heading">
+                            <i class="fa fa-user fa-fw"></i> Opciones
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-4">Cambiar contraseña:
+                                <a href="{% url 'usuario_cambiar_pass' usuario.pk %}">
+                                    <button class="btn btn-warning" title="Cambiar Contraseña"><i class="fa fa-edit fa-fw"></i></i>
+                                    </button>
+                                </a>
+
+                                </div>
+
+                                <!-- /.col-lg-8 (nested) -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                </div>
+
+        </div>
+{% endblock %}
+{% block extrajs %}
+
+
+{% endblock %}

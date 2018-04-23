@@ -1,0 +1,24 @@
+/* Desktops and laptops ----------- */
+@media only screen
+and (min-width: 1224px) and (min-width: 1824px) {
+    .titulo {
+        padding-left: 0px;
+    }
+}
+
+.texto{
+    background-color: #f8f8f8;
+    margin-bottom: 15px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    border: 1px solid #e7e7e7;
+}
+
+.texto {
+    color: #333;
+}
+
+a:focus, a:hover{
+    text-decoration: none;
+}

@@ -1,0 +1,24 @@
+.introducir-importe{
+    width: 100%;
+}
+
+.introducir-importe-tabla-titulo{
+    height: 50px;
+    text-align: center;
+}
+
+.introducir-importe-boton{
+    margin: 5px;
+    width: 75px;
+    height: 75px;
+
+}
+
+.label-normal {
+  background-color: #000000;
+}
+.label-normal[href]:hover,
+.label-normal[href]:focus {
+  background-color: #555555;
+}
+

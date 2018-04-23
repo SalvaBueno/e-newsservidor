@@ -1,0 +1,130 @@
+{% extends "cabecera.html" %}
+{% load tags_usuarios %}
+{% load bootstrap %}
+
+{% block extracss %}
+    <link href="{{ STATIC_URL }}niceAdmin/css/tpv.css" rel="stylesheet" xmlns="http://www.w3.org/1999/html">
+
+{% endblock %}
+
+{% block wrapper %}
+        <div class="col-xs-6">
+            <div class="login-form login-wrap">
+{#                {% get_usuarios_tpv as usuarios %}#}
+{##}
+{#                {% for usuario in usuarios %}#}
+{#                    <div class="alert alert-success" onclick="elegirusuario('{{ usuario.username }}')">#}
+{#                        {{ usuario.username }}#}
+{#                    </div>#}
+{#                {% endfor %}#}
+            </div>
+
+        </div>
+        <div class="col-xs-6">
+            <form class="login-form" action="/login/" method="post">{% csrf_token %}
+                <div class="login-wrap">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_profile"></i></span>
+                        <input class=" form-control" id="id_username" maxlength="254" name="username" type="text"
+                               placeholder="Username" autofocus>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                        <input class=" form-control" id="id_password" name="password" type="password"
+                               placeholder="Password">
+                    </div>
+                    {#                    <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>#}
+                    <table class="introducir-importe" border=1 bordercolor=gray cellspacing=8>
+                        <tr align=center>
+                            <td>
+
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('1')"> 1
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('2')"> 2
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('3')"> 3
+                                </button>
+                            </td>
+                        </tr>
+                        <tr align=center>
+                            <td>
+
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('4')"> 4
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('5')"> 5
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('6')"> 6
+                                </button>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('7')"> 7
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('8')"> 8
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('9')"> 9
+                                </button>
+                            </td>
+                        </tr>
+                        <tr align="center">
+                            <td>
+                                <button type="button" class="btn btn-danger introducir-importe-boton"
+                                        onclick="$('#id_password').val('');">borrar
+                                </button>
+                                <button type="button" class="btn btn-default introducir-importe-boton"
+                                        onclick="updatestring('0')"> 0
+                                </button>
+                                <button type="submit" class="btn btn-warning introducir-importe-boton"
+                                >Entrar
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+        </div>
+
+
+{% endblock %}
+{% block extrajs %}
+    <script type="application/javascript">
+        function elegirusuario(nick) {
+            $('#id_username').val(nick);
+            $('#id_password').focus();
+
+        }
+
+        function updatestring(boton) {
+            var texto = $('#id_password').val();
+            if (boton == ",") {
+                if (texto == "") {
+                    texto = texto + "0,"
+                }
+                if (texto.indexOf(",") >= 0) {
+
+                } else {
+                    texto = texto + boton;
+                }
+            } else {
+                texto = texto + boton;
+            }
+
+            $('#id_password').val(texto);
+
+        }
+
+    </script>
+
+{% endblock %}
+
+

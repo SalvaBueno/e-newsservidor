@@ -1,0 +1,158 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Textos Boshra">
+    <meta name="author" content="Brayan Bermúdez Luque y Enrique Avivar Rosino">
+    <meta name="keyword" content="Dreams Apps Creative">
+    <title>{% block titulo %} Boshra {% endblock %}</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ STATIC_URL }}web/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Core JS -->
+    <script src="{{ STATIC_URL }}web/js/jquery.js"></script>
+    <script src="{{ STATIC_URL }}web/js/bootstrap.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link href="{{ STATIC_URL }}web/css/landing-page.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}web/css/style.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{{ STATIC_URL }}web/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+          type="text/css">
+
+    {% block extra_css %}
+    {% endblock %}
+
+
+</head>
+<body>
+<!-- Navigation -->
+{% block navigation %}
+
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default topnav">
+    <div class="container topnav">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand topnav" href="{% url 'inicio' %}">Inicio</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                        <li><a class="navbar-brand topnav navbar-right" href="{% url 'logout' %}">Cerrar sesión</a></li>
+                    {% else %}
+
+                    <li><a data-toggle="modal" data-target="#modal_registro">Registrarse</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">Iniciar sesión</a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <form class="form" role="form" action="/login/" method="post"
+                                              accept-charset="UTF-8" id="login-nav">{% csrf_token %}
+                                            <div class="form-group">
+                                                <label class="sr-only" for="exampleInputEmail2">Dirección de
+                                                    correo</label>
+                                                <input type="text" class="form-control" id="username"
+                                                       placeholder="Correo electrónico" name="username" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="sr-only"
+                                                       for="exampleInputPassword2">Contraseña</label>
+                                                <input type="password" class="form-control" id="password"
+                                                       placeholder="Contraseña" name="password" required>
+                                                <div class="help-block text-right"><a href="">He olvidado la
+                                                    contraseña</a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary btn-block">Entrar
+                                                </button>
+                                            </div>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox"> Mantener sesión iniciada
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+
+{% endblock %}
+<div class="wrapper">
+    {% block cabecera %}
+
+    {% endblock %}
+    <!-- Page Content -->
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Modal -->
+    <div class="modal" id="modal_error" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="tituloModal">Fallo al iniciar sesión</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="textoModal">Usuario o contraseña incorrecto. Vuelve a intentarlo.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block footer %}
+    <footer>
+        <div class="container">
+            <p class="pull-right"><a href="#">Volver arriba</a></p>
+            <p>&copy; 2017 Boshra.<br/>
+                Realizado por Dreams Apps Creative</p>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block extra_js %}
+
+
+
+{% endblock %}
+
+</body>
+
+</html>

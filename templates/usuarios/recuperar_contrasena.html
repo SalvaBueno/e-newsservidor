@@ -1,0 +1,29 @@
+{% extends "cabecera.html" %}
+{% load bootstrap %}
+
+
+
+    {% block wrapper %}
+    <div class="container">
+
+      <form class="login-form" action="{% url 'recuperar_contrasena' %}" method="post">{% csrf_token %}
+        <div class="login-wrap">
+            <p class="login-img"><i class="icon_lock_alt"></i></p>
+            <label >Introduzca su correo para recuperar su contraseña</label>
+            <div class="input-group">
+
+                <span class="input-group-addon"><i class="icon_mail_alt"></i></span>
+
+                <input class=" form-control" id="id_email" maxlength="254" name="email" type="text" placeholder="email" autofocus>
+            </div>
+
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Enviar Correo</button>
+
+        </div>
+      </form>
+
+    </div>
+{% endblock %}
+
+
+

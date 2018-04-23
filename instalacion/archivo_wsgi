@@ -1,0 +1,21 @@
+echo "import os, sys, site" > $ARCHIVO_WSGI
+echo " " >> $ARCHIVO_WSGI
+echo "# Add the site-packages of the chosen virtualenv to work with " >> $ARCHIVO_WSGI
+echo "site.addsitedir('${RUTA_ENTORNO}lib/python2.7/site-packages')" >> $ARCHIVO_WSGI
+echo "" >> $ARCHIVO_WSGI
+echo "" >> $ARCHIVO_WSGI
+echo "sys.path.append('${DIRECTORIO_PROYECTO}')" >> $ARCHIVO_WSGI
+echo "sys.path.insert(0,os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2]))" >> $ARCHIVO_WSGI
+echo "" >> $ARCHIVO_WSGI
+echo "os.environ['DJANGO_SETTINGS_MODULE']='configuracion.settings'" >> $ARCHIVO_WSGI
+echo "" >> $ARCHIVO_WSGI
+echo "# Activate your virtual env" >> $ARCHIVO_WSGI
+echo "activate_env=os.path.expanduser('${RUTA_ENTORNO}bin/activate_this.py')" >> $ARCHIVO_WSGI
+echo "execfile(activate_env, dict(__file__=activate_env))" >> $ARCHIVO_WSGI
+echo "" >> $ARCHIVO_WSGI
+echo "from django.core.wsgi import get_wsgi_application" >> $ARCHIVO_WSGI
+echo "application = get_wsgi_application()" >> $ARCHIVO_WSGI
+
+
+
+
