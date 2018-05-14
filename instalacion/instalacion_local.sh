@@ -1,16 +1,16 @@
 #!/bin/bash
-NOMBRE_ENTORNO=bosrha
+NOMBRE_ENTORNO=universitariosApuros
 # finalizar con la barra siempre que sea directorios
-RUTA_ENTORNO=/home/brian/pruebas/entornos/
-DIRECTORIO_PROYECTO=/home/brian/git/Django/bosrha/
+RUTA_ENTORNO=/home/brian/entornos/
+DIRECTORIO_PROYECTO=/home/brian/git/Django/universitariosApuros/
 ARCHIVO_WSGI=${DIRECTORIO_PROYECTO}configuracion/apache.wsgi
 
 
 # creacion del archivo de configuracion de apache
 ARCHIVO_CONF_APACHE=/home/brian/pruebas/${NOMBRE_ENTORNO}.conf
 
-SERVER_NAME=textos.dreamsappscreative.es
-SERVER_ALIAS=textos.dreamsappscreative.es
+SERVER_NAME=universitarios.dreamsappscreative.es
+SERVER_ALIAS=universitarios.dreamsappscreative.es
 ARCHIVO_LOG=/root/${NOMBRE_ENTORNO}.log
 
 

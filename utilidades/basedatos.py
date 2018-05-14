@@ -1,5 +1,5 @@
 #-*- encoding: utf-8 -*-
-__author__ = 'brian'
+__author__ = 'salva'
 import os
 from configuracion.settings import PROJECT_PATH
 def copiabd():

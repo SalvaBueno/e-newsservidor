@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Dreams Apps Creative
+Salva
 
 Django settings for configuracion project.
 
@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'dal',
     'dal_select2',
-    'suit',  # If you deploy your project with Apache or Debug=False dont forget to run ./manage.py collectstatic
+    'material',
+    'material.admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -53,7 +54,7 @@ INSTALLED_APPS = (
 
     'datetimewidget',
     'usuarios',
-    'textos'
+    'enews',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -70,7 +71,6 @@ MIDDLEWARE_CLASSES = (
 para poder instalar con apache hay que descomentar static root y comentar
 los staticfiles_dirs hacer python manage.py collectstatic y dejar comoe staba
 """
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
@@ -79,7 +79,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # 'dajaxice.finders.DajaxiceFinder',
 )
 
 TEMPLATES = [
@@ -122,7 +121,6 @@ CKEDITOR_IMAGE_BACKEND = "pillow"
 CKEDITOR_CONFIGS = {
     'default': {
         'skin': 'office2013',
-        # 'skin': 'office2013',
         'toolbar_Basic': [
             ['Source', '-', 'Bold', 'Italic']
         ],
@@ -152,13 +150,7 @@ CKEDITOR_CONFIGS = {
             ]},
         ],
         'toolbar': 'YourCustomToolbarConfig',  # put selected toolbar config here
-        # 'toolbarGroups': [{ 'name': 'document', 'groups': [ 'mode', 'document', 'doctools' ] }],
-        # 'height': 291,
         'width': '100%',
-        # 'filebrowserWindowHeight': 725,
-        # 'filebrowserWindowWidth': 940,
-        # 'toolbarCanCollapse': True,
-        # 'mathJaxLib': '//cdn.mathjax.org/mathjax/2.2-latest/MathJax.js?config=TeX-AMS_HTML',
         'tabSpaces': 4,
         'extraPlugins': ','.join(
             [
@@ -195,6 +187,15 @@ TIME_ZONE = 'Europe/Madrid'
 USE_I18N = True
 USE_L10N = False
 USE_TZ = False
+
+#CORREO SMTP
+DEFAULT_FROM_EMAIL = 'E-news <ilitus33@gmail.com>'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ilitus33@gmail.com'
+EMAIL_HOST_PASSWORD = 'salvatres'
+EMAIL_PORT = 587
 
 STATIC_URL = '/static/'
 

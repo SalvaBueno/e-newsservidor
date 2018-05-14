@@ -1,5 +1,5 @@
 """
-WSGI config for Dreams Apps creative project.
+WSGI config for Salva project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

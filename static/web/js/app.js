@@ -400,13 +400,13 @@ function initializeMap() {
         position: new google.maps.LatLng(lat, lon),
     });
     
-	ptoros = new google.maps.Marker({
-	    position: new google.maps.LatLng(37.1896112, -3.6073748),
-	    map: map,	   
-	   title: 'GodZilla!!'		
-	});
+	// new google.maps.Marker({
+	//     position: new google.maps.LatLng(37.1896112, -3.6073748),
+	//     map: map,
+	//    title: 'GodZilla!!'
+	// });
 
-	var informacion= 'Dreams Apps Creative';
+	var informacion= 'Salva';
 
 	
     var infowindow = new google.maps.InfoWindow({

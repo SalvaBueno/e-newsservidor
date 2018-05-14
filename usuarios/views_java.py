@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from utilidades.contrasena import contrasena_generator
 
-__author__ = 'brian'
+__author__ = 'salva'
 
 import django.contrib.auth as auth
 import django.http as http
@@ -218,9 +218,13 @@ def get_perfil(request):
 def cambiar_pass(request):
     print "cambiando pass"
     try:
-        datos = json.loads(request.POST['data'])
-        antiguapass = datos.get('antigua')
-        nuevapass = datos.get('nueva')
+        try:
+            datos = json.loads(request.POST['data'])
+            antiguapass = datos.get('antigua')
+            nuevapass = datos.get('nueva')
+        except:
+            antiguapass = request.POST['antigua']
+            nuevapass = request.POST['nueva']
 
         if comprobar_usuario(datos):
             userdjango = get_userdjango_by_token(datos)
@@ -259,8 +263,8 @@ def recuperar_contrasena(request):
             userdjango.set_password(nueva_contrasena)
 
             userdjango.save()
-            enviarmail.envmail2("Se ha generado una nueva contraseña: " + nueva_contrasena, "Contraseña nueva",
-                                userdjango.email)
+            enviarmail.enviar_email("Contraseña nueva", "Se ha generado una nueva contraseña: " + nueva_contrasena,
+                                    "Se ha generado una nueva contraseña: " + nueva_contrasena, [userdjango.email, ])
 
             response_data = {'result': 'ok', 'message': 'se ha enviado un email con la nueva contraseña'}
 
@@ -276,18 +280,28 @@ def recuperar_contrasena(request):
 
 @csrf_exempt
 def cambiar_datos(request):
-    print "cambiando pass"
+    print "cambiando los datos del usuario"
     try:
-        datos = json.loads(request.POST['data'])
+        try:
+            datos = json.loads(request.POST['data'])
+            nombre = datos.get('nombre')
+            email = datos.get('email')
+
+        except Exception as e:
+            nombre = request.POST['nombre']
+            email = request.POST['email']
+
         if comprobar_usuario(datos):
             userdjango = get_userdjango_by_token(datos)
-            userdjango.first_name = datos.get('nombre')
-            userdjango.last_name = datos.get('apellidos')
-            userdjango.email = datos.get('email')
+            userdjango.username = nombre
+            userdjango.email = email
             userdjango.save()
+
             response_data = {'result': 'ok', 'message': 'Datos cambiados'}
         else:
-            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+            response_data = {'result': 'error', 'message': 'No se han podido cambiar los datos por duplicidad de nombre de usuario.'}
+
+        print response_data
 
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 

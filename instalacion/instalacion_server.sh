@@ -1,16 +1,16 @@
 #!/bin/bash
-NOMBRE_ENTORNO=bosrha
+NOMBRE_ENTORNO=universitariosApuros
 # finalizar con la barra siempre que sea directorios
 RUTA_ENTORNO=/var/www/entornos/
-DIRECTORIO_PROYECTO=/var/www/bosrha/
+DIRECTORIO_PROYECTO=/var/www/universitariosApuros/
 ARCHIVO_WSGI=${DIRECTORIO_PROYECTO}configuracion/apache.wsgi
 
 
 # creacion del archivo de configuracion de apache
 ARCHIVO_CONF_APACHE=/etc/apache2/sites-available/${NOMBRE_ENTORNO}.conf
 
-SERVER_NAME=textos.dreamsappscreative.es
-SERVER_ALIAS=textos.dreamsappscreative.es
+SERVER_NAME=universitarios.dreamsappscreative.es
+SERVER_ALIAS=universitarios.dreamsappscreative.es
 ARCHIVO_LOG=/root/${NOMBRE_ENTORNO}.log
 
 
@@ -27,6 +27,8 @@ do
     echo "7 desactivar archivo.conf"
     echo "8 crear archivo.wsgi"
     echo "9 migracion base datos"
+    echo "10 cambiar propietario del proyecto a www-data"
+    echo "11 actualizar proyecto (git pull)"
     echo "0 salir"
     echo "-------------- MENU ----------------"
 
@@ -138,6 +140,15 @@ do
 
         fi
         echo "------------------------------------------"
+        ;;
+
+        #opcion para cambiar permisos del directorio raiz a www-data
+        10)
+        chown -R www-data:www-data ${DIRECTORIO_PROYECTO}
+        ;;
+
+        11)
+
         ;;
 
 

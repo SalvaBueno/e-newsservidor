@@ -6,7 +6,7 @@ echo "	ErrorLog $ARCHIVO_LOG " >> $ARCHIVO_CONF_APACHE
 echo "	 " >> $ARCHIVO_CONF_APACHE
 echo "	 " >> $ARCHIVO_CONF_APACHE
 echo "	 " >> $ARCHIVO_CONF_APACHE
-echo "	WSGIDaemonProcess $NOMBRE_ENTORNO python-path=$RUTA_ENTORNO python-home=${RUTA_ENTORNO}${NOMBRE_ENTORNO}lib/python2.7/site-packages/ processes=5 threads=5 display-name=%{GROUP} " >> $ARCHIVO_CONF_APACHE
+echo "	WSGIDaemonProcess $NOMBRE_ENTORNO python-path=$RUTA_ENTORNO python-home=${RUTA_ENTORNO}${NOMBRE_ENTORNO}/lib/python2.7/site-packages/ processes=5 threads=5 display-name=%{GROUP} " >> $ARCHIVO_CONF_APACHE
 echo "	WSGIProcessGroup $NOMBRE_ENTORNO " >> $ARCHIVO_CONF_APACHE
 echo "	WSGIScriptAlias / $ARCHIVO_WSGI " >> $ARCHIVO_CONF_APACHE
 echo " " >> $ARCHIVO_CONF_APACHE

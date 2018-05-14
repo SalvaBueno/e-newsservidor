@@ -16,7 +16,7 @@ EXTRA_INSTALLED_APPS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/brian/git/Django/selan/databasesqlite',
+        'NAME': 'dbsqlite',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

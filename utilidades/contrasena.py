@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-__author__ = 'brian'
+__author__ = 'salva'
 
 import random
 import string

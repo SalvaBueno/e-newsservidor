@@ -1,8 +1,7 @@
 #-*- encoding: utf-8 -*-
-__author__ = 'brian'
+__author__ = 'salva'
 
 
-from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -11,6 +10,7 @@ class MultiFileInput(forms.FileInput):
     def render(self, name, value, attrs={}):
         attrs['multiple'] = 'multiple'
         return super(MultiFileInput, self).render(name, None, attrs=attrs)
+
     def value_from_datadict(self, data, files, name):
         if hasattr(files, 'getlist'):
             return files.getlist(name)

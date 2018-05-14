@@ -1,6 +1,7 @@
 django-mathfilters
 django==1.9
 django-suit
+django-material==1.1.1
 Pillow==2.3.0
 argparse==1.2.1
 django-annoying
@@ -20,3 +21,4 @@ six==1.5.2
 sqlparse
 static
 wsgiref==0.1.2
+youtube-dl
