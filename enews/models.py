@@ -15,9 +15,9 @@ class Categoria(models.Model):
 
 class Noticia(models.Model):
     categoria = models.ForeignKey(Categoria, null=True, blank=True)
-    nombre_noticia = models.CharField(max_length=20)
-    descripcion_noticia = models.CharField(max_length=300)
-    titular_noticia = models.CharField(max_length=50)
+    nombre_noticia = models.CharField(max_length=25)
+    descripcion_noticia = models.CharField(max_length=1000)
+    titular_noticia = models.CharField(max_length=100)
 
     def __unicode__(self):
         return u"%s" % self.nombre_noticia
@@ -26,7 +26,7 @@ class Noticia(models.Model):
 class Comentario(models.Model):
     noticia = models.ForeignKey(Noticia, null=True, blank=True)
     usuario = models.ForeignKey(User, null=True, blank=True)
-    contenido_comentario = models.CharField(max_length=100)
+    contenido_comentario = models.CharField(max_length=150)
 
     def __unicode__(self):
-        return u"%s, %s" % self.pk, self.usuario.username
+        return u"%s, %s" % (self.pk, self.usuario.username)
