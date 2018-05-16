@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+from enews.models import Noticia, Categoria
+from enews.models import Comentario
 from utilidades.contrasena import contrasena_generator
 
 __author__ = 'salva'
@@ -10,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import datetime
 from utilidades import Token, enviarmail
-from usuarios.models import Tokenregister
+from usuarios.models import Tokenregister, Usuario
 from django.contrib.auth.models import User
 
 
@@ -302,3 +304,165 @@ def get_usuarios(request):
         response_data = {'errorcode': 'U0006', 'result': 'error',
                          'message': 'Error en busqueda de usuarios : ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def get_comentarios(request):
+    print "buscando comentarios"
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+        except Exception as e:
+            datos = None
+
+        if datos is not None and comprobar_usuario(datos):
+            userdjango = get_userdjango_by_token(datos)
+            comentarios = Comentario.objects.filter(usuario=userdjango)
+            response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'comentarios': []}
+            for p in comentarios:
+                response_data['comentarios'].append({'pk': str(p.pk),
+                                                     'noticia': {'pk': comentarios.noticia.pk,
+                                                                 'nombre_noticia': comentarios.noticia.nombre_noticia},
+                                                     'usuario': userdjango.username,
+                                                     'contenido_comentario': p.contenido_comentario
+                                                     })
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def get_noticias(request):
+    print "buscando noticias"
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+            categoria = datos.get('categoria_noticia')
+        except Exception as e:
+            datos = None
+            categoria = request.POST['categoria_noticia']
+
+        if datos is not None and comprobar_usuario(datos):
+            categoria = get_object_or_None(Categoria, nombre_categoria=categoria)
+            noticias = Noticia.objects.filter(categoria=categoria) if categoria is not None else None
+            response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'noticias': []}
+            for p in noticias:
+                response_data['noticias'].append({'pk': str(p.pk),
+                                                  'nombre': p.nombre_noticia,
+                                                  'descripcion_noticia': p.descripcion_noticia,
+                                                  'titular_noticia': p.titular_noticia,
+                                                  'imagen_noticia': str(p.imagen_noticia)})
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def get_noticia(request):
+    print "buscando noticia"
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+            noticia_pk = datos.get('pk')
+
+        except Exception as e:
+            datos = None
+            noticia_pk = request.POST['pk']
+
+        if datos is not None and comprobar_usuario(datos):
+            noticia = get_object_or_None(Noticia, pk=noticia_pk)
+
+            response_data = {'result': 'ok', 'message': 'Noticia enviada',
+                             'nombre_noticia': noticia.nombre_noticia,
+                             'descripcion_noticia': noticia.descripcion_noticia,
+                             'titular_noticia': noticia.titular_noticia,
+                             'imagen_noticia': noticia.imagen_noticia}
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def get_comentarios_noticia(request):
+    print "buscando noticia"
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+            noticia_pk = datos.get('pk')
+
+        except Exception as e:
+            datos = None
+            noticia_pk = request.POST['pk']
+
+        if datos is not None and comprobar_usuario(datos):
+            comentarios = Comentario.objects.filter(noticia__pk=noticia_pk)
+            userdjango = get_userdjango_by_token(datos)
+
+            if comentarios.count() > 0:
+                response_data = {'result': 'ok', 'message': 'Obtenemos los comentarios de la noticia',
+                                 'comentarios': []}
+                for p in comentarios:
+                    response_data['comentarios'].append({'pk': str(p.pk),
+                                                         'usuario': userdjango.username,
+                                                         'contenido_comentario': p.contenido_comentario
+                                                         })
+            else:
+                response_data = {'result': 'error', 'message': 'No hay comentarios para esta noticia'}
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+    return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+@csrf_exempt
+def registrar_comentarios(request):
+    print "introduciendo comentario"
+    try:
+        try:
+            datos = json.loads(request.POST['data'])
+            noticia_pk = datos.get('pk')
+            contenido_comentario = datos.get('contenido_comentario')
+            noticia = get_object_or_None(Noticia, pk=noticia_pk)
+        except Exception as e:
+            datos = None
+            noticia_pk = request.POST['pk']
+            contenido_comentario = request.POST['contenido_comentario']
+            noticia = get_object_or_None(Noticia, pk=noticia_pk)
+
+        if datos is not None and comprobar_usuario(datos) and noticia is not None:
+            userdjango = get_userdjango_by_token(datos)
+            comentario = Comentario.objects.create(
+                usuario=userdjango,
+                noticia=noticia,
+                contenido_comentario=contenido_comentario)
+            comentario.save()
+
+            response_data = {'result': 'ok', 'message': 'Comentarios añadido con exito'}
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0006', 'result': 'error',
+                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+    return http.HttpResponse(json.dumps(response_data), content_type="application/json")

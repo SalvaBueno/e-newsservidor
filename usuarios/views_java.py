@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 import json
 import datetime
 from utilidades import Token, enviarmail
-from usuarios.models import Tokenregister
+from usuarios.models import Tokenregister, Usuario
 from django.contrib.auth.models import User
 
 
@@ -73,6 +73,7 @@ def registrar_usuario(request):
         if usuarios.count() == 0:
             if usuarios_email.count() == 0:
                 user = User.objects.create(username=nombre, email=email)
+                Usuario.objects.create(user=user)
                 user.set_password(password)
                 user.save()
                 response_data = {'result': 'ok', 'message': 'Usuario creado correctamente'}
@@ -142,6 +143,61 @@ def login(request):
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
+@csrf_exempt
+def registro_google(request):
+    print "Usuario de google"
+    try:
+        try:
+            print request.POST
+            datos = json.loads(request.POST['data'])
+            username = datos.get('usuario')
+            email = datos.get('email')
+
+        except Exception as e:
+            username = request.POST['nombre_usuario']
+            email = request.POST['email_usuario']
+
+        user = get_object_or_None(User, username=username, email=email)
+        if user is None:
+            user = User.objects.create(username=username,
+                                       email=email)
+        try:
+            user.usuario.logingoogle = True
+            user.usuario.save()
+        except:
+            usuario = Usuario.objects.create(user=user, logingoogle=True)
+
+        user.last_login = datetime.datetime.now()
+        user.save()
+        if user.is_active:
+            user_token = get_object_or_None(Tokenregister, user=user)
+            if user_token is None:
+                token1 = str(user.id) + "_" + Token.id_generator()
+                tokenform = Tokenregister(token=token1, user=user)
+                tokenform.save()
+                user_token = get_object_or_None(Tokenregister, user=user)
+            else:
+                user_token.date = datetime.datetime.now()
+                user_token.token = str(user.id) + "_" + Token.id_generator()
+                user_token.save()
+
+            response_data = {'result': 'ok', 'message': 'Usuario logueado', 'token': user_token.token,
+                             'usuario': user.username,
+                             'nombre': user.first_name,
+                             }
+
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+        else:
+            response_data = {'result': 'error', 'message': 'Usuario no activo'}
+            return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+    except Exception as e:
+        response_data = {'errorcode': 'U0008', 'result': 'error',
+                         'message': 'Error al registrar el usuario de google: ' + str(e)}
+
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
 # definicion para logear un usuario desde la aplicación java
 @csrf_exempt
 def logout(request):
@@ -196,12 +252,18 @@ def get_perfil(request):
 
         if comprobar_usuario(datos):
             userdjango = get_userdjango_by_token(datos)
+            try:
+                logingoogle = userdjango.usuario.logingoogle
+            except Exception as e:
+                Usuario.objects.create(user=userdjango)
+                logingoogle = False
 
             response_data = {'result': 'ok', 'message': 'Perfil de usuario',
                              'email': userdjango.email,
                              'username': userdjango.username,
                              'nombre': userdjango.first_name,
-                             'apellidos': userdjango.last_name}
+                             'apellidos': userdjango.last_name,
+                             'logingoogle': logingoogle}
 
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
@@ -210,7 +272,7 @@ def get_perfil(request):
 
     except Exception as e:
         response_data = {'errorcode': 'U0004', 'result': 'error', 'message': 'Error en perfil de usuario: ' + str(e)}
-        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
+    return http.HttpResponse(json.dumps(response_data),content_type="application/json")
 
 
 # metodo para que un usuario pueda ver su perfil, necesario estar loegueado y pasar su id y token
@@ -299,7 +361,8 @@ def cambiar_datos(request):
 
             response_data = {'result': 'ok', 'message': 'Datos cambiados'}
         else:
-            response_data = {'result': 'error', 'message': 'No se han podido cambiar los datos por duplicidad de nombre de usuario.'}
+            response_data = {'result': 'error',
+                             'message': 'No se han podido cambiar los datos por duplicidad de nombre de usuario.'}
 
         print response_data
 
