@@ -321,14 +321,15 @@ def get_comentarios(request):
             response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'comentarios': []}
             for p in comentarios:
                 response_data['comentarios'].append({'pk': str(p.pk),
-                                                     'noticia': {'pk': comentarios.noticia.pk,
-                                                                 'nombre_noticia': comentarios.noticia.nombre_noticia},
-                                                     'usuario': userdjango.username,
-                                                     'contenido_comentario': p.contenido_comentario
+                                                     'contenido_comentario': p.contenido_comentario,
+                                                     'noticia': {'pk': p.noticia.pk,
+                                                                 'nombre_noticia': p.noticia.nombre_noticia},
+                                                     'usuario': {'username': p.usuario.username}
                                                      })
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
 
+        print response_data
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
@@ -354,9 +355,10 @@ def get_noticias(request):
             response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'noticias': []}
             for p in noticias:
                 response_data['noticias'].append({'pk': str(p.pk),
-                                                  'nombre': p.nombre_noticia,
-                                                  'descripcion_noticia': p.descripcion_noticia,
+                                                  'nombre_noticia': p.nombre_noticia,
+                                                  'resumen_noticia': p.resumen_noticia,
                                                   'titular_noticia': p.titular_noticia,
+                                                  'fecha_noticia': p.fecha_noticia,
                                                   'imagen_noticia': str(p.imagen_noticia)})
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
@@ -365,7 +367,7 @@ def get_noticias(request):
 
     except Exception as e:
         response_data = {'errorcode': 'U0006', 'result': 'error',
-                         'message': 'Error en la busqueda de comentarios : ' + str(e)}
+                         'message': 'Error en la busqueda de noticias : ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
 
@@ -388,7 +390,8 @@ def get_noticia(request):
                              'nombre_noticia': noticia.nombre_noticia,
                              'descripcion_noticia': noticia.descripcion_noticia,
                              'titular_noticia': noticia.titular_noticia,
-                             'imagen_noticia': noticia.imagen_noticia}
+                             'imagen_noticia': noticia.imagen_noticia,
+                             'fecha_noticia': noticia.fecha_noticia}
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
 
@@ -422,7 +425,7 @@ def get_comentarios_noticia(request):
                 for p in comentarios:
                     response_data['comentarios'].append({'pk': str(p.pk),
                                                          'usuario': userdjango.username,
-                                                         'contenido_comentario': p.contenido_comentario
+                                                         'contenido_comentario': p.contenido_comentario,
                                                          })
             else:
                 response_data = {'result': 'error', 'message': 'No hay comentarios para esta noticia'}

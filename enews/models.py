@@ -16,8 +16,10 @@ class Categoria(models.Model):
 class Noticia(models.Model):
     categoria = models.ForeignKey(Categoria, null=True, blank=True)
     nombre_noticia = models.CharField(max_length=25)
+    fecha_noticia = models.DateField(auto_now_add=True, null=True, blank=True)
     descripcion_noticia = models.CharField(max_length=1000)
-    imagen_noticia = models.ImageField(upload_to="noticias/", null=True ,blank=True, max_length=24576, default="noticias/esport.jpg")
+    resumen_noticia = models.CharField(max_length=100, null=True, blank=True)
+    imagen_noticia = models.ImageField(upload_to="noticias/", null=True,blank=True, max_length=24576, default="noticias/esport.jpg")
     titular_noticia = models.CharField(max_length=100)
 
     def __unicode__(self):

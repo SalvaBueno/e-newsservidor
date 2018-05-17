@@ -18,6 +18,7 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^usuarios/', include('usuarios.urls')),
+    url(r'^enews/', include('enews.urls_java')),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
