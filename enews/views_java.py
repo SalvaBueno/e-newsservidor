@@ -344,25 +344,33 @@ def get_noticias(request):
     try:
         try:
             datos = json.loads(request.POST['data'])
-            categoria = datos.get('categoria_noticia')
+            categoria_noticia = datos.get('categoria_noticia')
         except Exception as e:
             datos = None
-            categoria = request.POST['categoria_noticia']
+            categoria_noticia = request.POST['categoria_noticia']
 
         if datos is not None and comprobar_usuario(datos):
-            categoria = get_object_or_None(Categoria, nombre_categoria=categoria)
-            noticias = Noticia.objects.filter(categoria=categoria) if categoria is not None else None
+            categoria = get_object_or_None(Categoria, nombre_categoria=categoria_noticia)
+            noticias = Noticia.objects.filter(categoria=categoria).order_by("pk") if categoria is not None else None
             response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'noticias': []}
             for p in noticias:
-                response_data['noticias'].append({'pk': str(p.pk),
-                                                  'nombre_noticia': p.nombre_noticia,
-                                                  'resumen_noticia': p.resumen_noticia,
-                                                  'titular_noticia': p.titular_noticia,
-                                                  'fecha_noticia': p.fecha_noticia,
-                                                  'imagen_noticia': str(p.imagen_noticia)})
+                if p.fecha_noticia is not None:
+                    response_data['noticias'].append({'pk': str(p.pk),
+                                                      'nombre_noticia': p.nombre_noticia,
+                                                      'resumen_noticia': p.resumen_noticia,
+                                                      'titular_noticia': p.titular_noticia,
+                                                      'fecha_noticia': str(p.fecha_noticia.day) + '/' + str(p.fecha_noticia.month) + '/' + str(p.fecha_noticia.year),
+                                                      'imagen_noticia': str(p.imagen_noticia)})
+                else:
+                    response_data['noticias'].append({'pk': str(p.pk),
+                                                      'nombre_noticia': p.nombre_noticia,
+                                                      'resumen_noticia': p.resumen_noticia,
+                                                      'titular_noticia': p.titular_noticia,
+                                                      'imagen_noticia': str(p.imagen_noticia)})
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
 
+        print response_data
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
@@ -377,24 +385,34 @@ def get_noticia(request):
     try:
         try:
             datos = json.loads(request.POST['data'])
-            noticia_pk = datos.get('pk')
+            noticia_pk = datos.get('noticia_pk')
 
         except Exception as e:
             datos = None
-            noticia_pk = request.POST['pk']
+            noticia_pk = request.POST['noticia_pk']
 
         if datos is not None and comprobar_usuario(datos):
             noticia = get_object_or_None(Noticia, pk=noticia_pk)
-
-            response_data = {'result': 'ok', 'message': 'Noticia enviada',
-                             'nombre_noticia': noticia.nombre_noticia,
-                             'descripcion_noticia': noticia.descripcion_noticia,
-                             'titular_noticia': noticia.titular_noticia,
-                             'imagen_noticia': noticia.imagen_noticia,
-                             'fecha_noticia': noticia.fecha_noticia}
+            if noticia.fecha_noticia is not None:
+                response_data = {'result': 'ok', 'pk': str(noticia.pk),
+                                  'nombre_noticia': noticia.nombre_noticia,
+                                  'resumen_noticia': noticia.resumen_noticia,
+                                  'descripcion_noticia': noticia.descripcion_noticia,
+                                  'titular_noticia': noticia.titular_noticia,
+                                  'fecha_noticia': str(noticia.fecha_noticia.day) + '/' + str(
+                                      noticia.fecha_noticia.month) + '/' + str(noticia.fecha_noticia.year),
+                                  'imagen_noticia': str(noticia.imagen_noticia)}
+            else:
+                response_data = {'result': 'ok', 'pk': str(noticia.pk),
+                                  'nombre_noticia': noticia.nombre_noticia,
+                                  'resumen_noticia': noticia.resumen_noticia,
+                                  'descripcion_noticia': noticia.descripcion_noticia,
+                                  'titular_noticia': noticia.titular_noticia,
+                                  'imagen_noticia': str(noticia.imagen_noticia)}
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
 
+        print response_data
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
