@@ -317,15 +317,24 @@ def get_comentarios(request):
 
         if datos is not None and comprobar_usuario(datos):
             userdjango = get_userdjango_by_token(datos)
-            comentarios = Comentario.objects.filter(usuario=userdjango)
+            comentarios = Comentario.objects.filter(usuario=userdjango).order_by("-pk")
             response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'comentarios': []}
             for p in comentarios:
-                response_data['comentarios'].append({'pk': str(p.pk),
-                                                     'contenido_comentario': p.contenido_comentario,
-                                                     'noticia': {'pk': p.noticia.pk,
-                                                                 'nombre_noticia': p.noticia.nombre_noticia},
-                                                     'usuario': {'username': p.usuario.username}
-                                                     })
+                if p.fecha_comentario is not None:
+                    response_data['comentarios'].append({'pk': str(p.pk),
+                                                         'contenido_comentario': p.contenido_comentario,
+                                                         'fecha_comentario': str(p.fecha_comentario.day) + '/' + str(p.fecha_comentario.month) + '/' + str(p.fecha_comentario.year),
+                                                         'noticia': {'pk': p.noticia.pk,
+                                                                     'nombre_noticia': p.noticia.nombre_noticia},
+                                                         'usuario': {'username': p.usuario.username}
+                                                         })
+                else:
+                    response_data['comentarios'].append({'pk': str(p.pk),
+                                                         'contenido_comentario': p.contenido_comentario,
+                                                         'noticia': {'pk': p.noticia.pk,
+                                                                     'nombre_noticia': p.noticia.nombre_noticia},
+                                                         'usuario': {'username': p.usuario.username}
+                                                         })
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
 

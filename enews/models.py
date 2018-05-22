@@ -19,7 +19,7 @@ class Noticia(models.Model):
     fecha_noticia = models.DateField(auto_now_add=True, null=True, blank=True)
     descripcion_noticia = models.CharField(max_length=1000)
     resumen_noticia = models.CharField(max_length=100, null=True, blank=True)
-    imagen_noticia = models.ImageField(upload_to="noticias/", null=True,blank=True, max_length=24576, default="noticias/esport.jpg")
+    imagen_noticia = models.ImageField(upload_to="noticias/", null=True,blank=True, max_length=24576, default="noticias/logo_app.png")
     titular_noticia = models.CharField(max_length=100)
 
     def __unicode__(self):
@@ -30,6 +30,7 @@ class Comentario(models.Model):
     noticia = models.ForeignKey(Noticia, null=True, blank=True)
     usuario = models.ForeignKey(User, null=True, blank=True)
     contenido_comentario = models.CharField(max_length=150)
+    fecha_comentario = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def __unicode__(self):
-        return u"%s, %s" % (self.pk, self.usuario.username)
+        return u"%s, %s" % (self.usuario.username, self.noticia.nombre_noticia)
