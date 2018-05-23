@@ -318,7 +318,7 @@ def get_comentarios(request):
         if datos is not None and comprobar_usuario(datos):
             userdjango = get_userdjango_by_token(datos)
             comentarios = Comentario.objects.filter(usuario=userdjango).order_by("-pk")
-            response_data = {'result': 'ok', 'message': 'Obtenemos las noticias', 'comentarios': []}
+            response_data = {'result': 'ok', 'message': 'Obtenemos los comentarios', 'comentarios': []}
             for p in comentarios:
                 if p.fecha_comentario is not None:
                     response_data['comentarios'].append({'pk': str(p.pk),
@@ -432,32 +432,47 @@ def get_noticia(request):
 
 @csrf_exempt
 def get_comentarios_noticia(request):
-    print "buscando noticia"
+    print "buscando comentarios de la noticia"
     try:
         try:
             datos = json.loads(request.POST['data'])
-            noticia_pk = datos.get('pk')
+            noticia_pk = datos.get('noticia_pk')
 
         except Exception as e:
             datos = None
-            noticia_pk = request.POST['pk']
+            noticia_pk = request.POST['noticia_pk']
 
         if datos is not None and comprobar_usuario(datos):
             comentarios = Comentario.objects.filter(noticia__pk=noticia_pk)
-            userdjango = get_userdjango_by_token(datos)
 
             if comentarios.count() > 0:
-                response_data = {'result': 'ok', 'message': 'Obtenemos los comentarios de la noticia',
-                                 'comentarios': []}
+                response_data = {'result': 'ok', 'message': 'Obtenemos los comentarios de la noticia', 'comentarios': []}
                 for p in comentarios:
-                    response_data['comentarios'].append({'pk': str(p.pk),
-                                                         'usuario': userdjango.username,
-                                                         'contenido_comentario': p.contenido_comentario,
-                                                         })
+                    if p.fecha_comentario is not None:
+                        response_data['comentarios'].append({'pk': str(p.pk),
+                                                             'contenido_comentario': p.contenido_comentario,
+                                                             'fecha_comentario': str(
+                                                                 p.fecha_comentario.day) + '/' + str(
+                                                                 p.fecha_comentario.month) + '/' + str(
+                                                                 p.fecha_comentario.year),
+                                                             'noticia': {'pk': p.noticia.pk,
+                                                                         'nombre_noticia': p.noticia.nombre_noticia},
+                                                             'usuario': {'username': p.usuario.username}
+                                                             })
+                    else:
+                        response_data['comentarios'].append({'pk': str(p.pk),
+                                                             'contenido_comentario': p.contenido_comentario,
+                                                             'noticia': {'pk': p.noticia.pk,
+                                                                         'nombre_noticia': p.noticia.nombre_noticia},
+                                                             'usuario': {'username': p.usuario.username}
+                                                             })
             else:
-                response_data = {'result': 'error', 'message': 'No hay comentarios para esta noticia'}
+                response_data = {'result': 'no_comentarios', 'message': 'No hay comentarios para esta noticia'}
         else:
             response_data = {'result': 'error', 'message': 'Usuario no logueado'}
+
+        print response_data
+        return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
     except Exception as e:
         response_data = {'errorcode': 'U0006', 'result': 'error',
@@ -471,12 +486,13 @@ def registrar_comentarios(request):
     try:
         try:
             datos = json.loads(request.POST['data'])
-            noticia_pk = datos.get('pk')
+            noticia_pk = datos.get('noticia_pk')
             contenido_comentario = datos.get('contenido_comentario')
             noticia = get_object_or_None(Noticia, pk=noticia_pk)
+
         except Exception as e:
             datos = None
-            noticia_pk = request.POST['pk']
+            noticia_pk = request.POST['noticia_pk']
             contenido_comentario = request.POST['contenido_comentario']
             noticia = get_object_or_None(Noticia, pk=noticia_pk)
 
