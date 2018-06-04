@@ -84,7 +84,7 @@ def registrar_usuario(request):
 
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
-    except:
+    except Exception as e:
         response_data = {'errorcode': 'U0005', 'result': 'error', 'message': 'Error en crear usuario. ' + str(e)}
         return http.HttpResponse(json.dumps(response_data), content_type="application/json")
 
